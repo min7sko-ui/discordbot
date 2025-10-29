@@ -1,8 +1,17 @@
 node_modules/
 dist/
 .env
+.env.local
+.env.*.local
 *.log
+logs/
 data/*.json
 data/transcripts/*.html
 data/transcripts/*.txt
+transcripts/
 .DS_Store
+Thumbs.db
+.vscode/
+.idea/
+*.tmp
+*.temp
