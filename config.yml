@@ -3,16 +3,16 @@
 # IMPORTANT: Sensitive values like tokens should be in .env file, not here!
 
 # Discord Bot Settings (Use environment variables for sensitive data)
-token: ""  # Leave empty - set DISCORD_TOKEN in .env file
-guild_id: ""  # Set GUILD_ID in .env file
+token: "MTI0OTI1ODk2NjIzMjQ2OTUwNg.G1WFQR.ygQlQ21BcJgmeCOwDNzDTWyhBXtLWTqVJHN2Qw"  # Leave empty - set DISCORD_TOKEN in .env file
+guild_id: "1170748791616450652"  # Set GUILD_ID in .env file
 
 # Staff & Channel Configuration
-staff_roles: []  # Add staff role IDs here or use STAFF_ROLES env var
+staff_roles: [1170748791616450660]  # Add staff role IDs here or use STAFF_ROLES env var
 
-ticket_category_id: ""  # Set TICKET_CATEGORY_ID in .env
-feedback_channel_id: ""  # Set FEEDBACK_CHANNEL_ID in .env
-transcript_channel_id: ""  # Set TRANSCRIPT_CHANNEL_ID in .env
-log_channel_id: ""  # Set LOG_CHANNEL_ID in .env
+ticket_category_id: "1170748792660820094"  # Set TICKET_CATEGORY_ID in .env
+feedback_channel_id: "1170748792660820096"  # Set FEEDBACK_CHANNEL_ID in .env
+transcript_channel_id: "1170748792660820096"  # Set TRANSCRIPT_CHANNEL_ID in .env
+log_channel_id: "1170748792660820096"  # Set LOG_CHANNEL_ID in .env
 
 # Branding & Appearance (All Editable)
 bot_name: "Advanced Support Bot"

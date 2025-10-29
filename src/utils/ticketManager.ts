@@ -80,35 +80,49 @@ export class TicketManager {
       const ticketNumber = Object.keys(tickets).length + 1;
       const ticketId = `ticket-${ticketNumber.toString().padStart(4, '0')}`;
 
+      // Build permission overwrites with validation
+      const permissionOverwrites: any[] = [
+        {
+          id: guild.id,
+          deny: [PermissionFlagsBits.ViewChannel],
+        },
+        {
+          id: user.id,
+          allow: [
+            PermissionFlagsBits.ViewChannel,
+            PermissionFlagsBits.SendMessages,
+            PermissionFlagsBits.ReadMessageHistory,
+            PermissionFlagsBits.AttachFiles,
+          ],
+        },
+      ];
+
+      // Add staff roles only if they exist in the guild
+      for (const roleId of config.staff_roles) {
+        if (roleId && roleId.trim()) {
+          const role = guild.roles.cache.get(roleId);
+          if (role) {
+            permissionOverwrites.push({
+              id: roleId,
+              allow: [
+                PermissionFlagsBits.ViewChannel,
+                PermissionFlagsBits.SendMessages,
+                PermissionFlagsBits.ReadMessageHistory,
+                PermissionFlagsBits.ManageMessages,
+                PermissionFlagsBits.AttachFiles,
+              ],
+            });
+          } else {
+            console.warn(chalk.yellow(`⚠️ Staff role ${roleId} not found in guild, skipping...`));
+          }
+        }
+      }
+
       const channel = await guild.channels.create({
         name: `${ticketId}-${user.username}`,
         type: ChannelType.GuildText,
         parent: config.ticket_category_id,
-        permissionOverwrites: [
-          {
-            id: guild.id,
-            deny: [PermissionFlagsBits.ViewChannel],
-          },
-          {
-            id: user.id,
-            allow: [
-              PermissionFlagsBits.ViewChannel,
-              PermissionFlagsBits.SendMessages,
-              PermissionFlagsBits.ReadMessageHistory,
-              PermissionFlagsBits.AttachFiles,
-            ],
-          },
-          ...config.staff_roles.map((roleId) => ({
-            id: roleId,
-            allow: [
-              PermissionFlagsBits.ViewChannel,
-              PermissionFlagsBits.SendMessages,
-              PermissionFlagsBits.ReadMessageHistory,
-              PermissionFlagsBits.ManageMessages,
-              PermissionFlagsBits.AttachFiles,
-            ],
-          })),
-        ],
+        permissionOverwrites,
       });
 
       const ticketData: TicketData = {
