@@ -1,12 +1,12 @@
-token: "YOUR_BOT_TOKEN_HERE"
-guild_id: "YOUR_GUILD_ID_HERE"
+token: "MTI0OTI1ODk2NjIzMjQ2OTUwNg.GYaQBy.cEAVh6kDviqcr-CRy2M3yGe9tV7o7ZXSOb1l2Y"
+guild_id: "1170748791616450652"
 
 staff_roles:
-  - "YOUR_STAFF_ROLE_ID_HERE"
+  - "1170748791616450660"
 
-ticket_category_id: "YOUR_CATEGORY_ID_HERE"
-feedback_channel_id: "YOUR_FEEDBACK_CHANNEL_ID_HERE"
-transcript_channel_id: "YOUR_TRANSCRIPT_CHANNEL_ID_HERE"
+ticket_category_id: "1170748792660820094"
+feedback_channel_id: "1170748792660820095"
+transcript_channel_id: "1170748792660820095"
 
 embed_color: "#5865F2"
 footer_text: "Support System © 2025"
