@@ -1,0 +1,106 @@
+✅ Required Feature Implementation
+
+1. Full Customization & Branding
+
+Allow editing of all embed components: title, description, color, footer, thumbnail, image, author, buttons, and emojis.
+
+Add config options for branding (bot name, footer text, embed style) — all editable via command and YAML.
+
+2. Ticket Management Improvements
+
+Add ticket claiming system — staff can “claim” a ticket to mark ownership.
+
+Add priority levels (Low, Medium, High, Urgent) with colored labels and filters.
+
+Add ticket review system — after closure, user can rate staff (1-5 stars) and leave feedback (stored in logs).
+
+Add ticket questions system — custom modals with configurable fields per panel (e.g., “What is your issue?” “Order ID?”).
+
+Add advanced tagging system — staff can attach custom tags (e.g., “Billing”, “Bug”, “Refund”).
+
+3. Automation Features
+
+Add auto-close system (inactivity timeout) with warning messages before closure.
+
+Add working hours system — configurable start/end hours and automatic user notification if ticket created outside support hours.
+
+Add ticket overload system — configurable limit; if too many tickets open, send a notice that support is busy.
+
+Add inactivity monitor — send reminders to staff if tickets remain unresponded to for too long.
+
+4. Logging & Transcripts
+
+Add full logging system (ticket creation, claim, close, reopen, delete, edits).
+
+Add HTML or TXT transcript generator (configurable format, stored locally).
+
+Optionally send transcript to staff log channel or user DM upon closure.
+
+5. Advanced Features
+
+Add AI-powered auto response system (optional, toggleable in config).
+
+
+Add addon system — ability to load custom JS/TS modules dynamically from /addons directory.
+
+6. Multi-Language & Config
+
+Add lang/ folder with translation JSONs (English default, easy to extend).
+
+Add command /ticket setlanguage <lang> to switch language globally.
+
+Ensure every message uses translation keys instead of hardcoded text.
+
+7. Admin & Analytics
+
+Add /ticket stats command — display analytics (total tickets, avg. response time, staff activity).
+
+Add /ticket logs — view recent ticket actions.
+
+Add /ticket settings — interactive menu to configure inactivity timers, working hours, priorities, etc.
+
+Add permission check for all admin commands (ManageGuild or Admin).
+
+⚙️ Technical Requirements
+
+Use Discord.js v14.15.3
+
+Use TypeScript
+
+Use YAML or JSON for configuration
+
+Maintain compatibility with existing ticket-panels.yml
+
+Use js-yaml for read/write operations
+
+Support auto command registration
+
+Write code in clean, modular architecture (e.g., /commands, /utils, /events, /addons folders)
+
+🧠 Bonus (Optional but Preferred)
+
+Add Dockerfile and .env.example for full self-hosting.
+
+Add license and product info embed (for BuiltByBit listing).
+
+Add startup diagnostics (check if all configs exist, else auto-generate defaults).
+
+Add graceful error logging (log file + console).
+
+✅ Output Expectation
+
+Return a ready-to-use project folder with:
+
+Complete src/ TypeScript source
+
+Updated package.json
+
+All new commands/utilities
+
+Example config.yml and lang/en.yml
+
+README.md describing features and setup
+
+📋 Prompt Summary
+
+“Edit my existing Discord.js v14 ticket bot and expand it into a modern, production-ready support system with all advanced features: multi-language, logging, analytics, inactivity automation, priority levels, transcripts, AI replies, and addon support — using modular, clean TypeScript structure.”

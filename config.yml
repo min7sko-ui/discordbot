@@ -1,15 +1,114 @@
-token: "MTI0OTI1ODk2NjIzMjQ2OTUwNg.GYaQBy.cEAVh6kDviqcr-CRy2M3yGe9tV7o7ZXSOb1l2Y"
-guild_id: "1170748791616450652"
+# Advanced Discord Ticket Bot Configuration
+# All settings are editable and customizable
+# IMPORTANT: Sensitive values like tokens should be in .env file, not here!
 
-staff_roles:
-  - "1170748791616450660"
+# Discord Bot Settings (Use environment variables for sensitive data)
+token: ""  # Leave empty - set DISCORD_TOKEN in .env file
+guild_id: ""  # Set GUILD_ID in .env file
 
-ticket_category_id: "1170748792660820094"
-feedback_channel_id: "1170748792660820095"
-transcript_channel_id: "1170748792660820095"
+# Staff & Channel Configuration
+staff_roles: []  # Add staff role IDs here or use STAFF_ROLES env var
 
-embed_color: "#5865F2"
+ticket_category_id: ""  # Set TICKET_CATEGORY_ID in .env
+feedback_channel_id: ""  # Set FEEDBACK_CHANNEL_ID in .env
+transcript_channel_id: ""  # Set TRANSCRIPT_CHANNEL_ID in .env
+log_channel_id: ""  # Set LOG_CHANNEL_ID in .env
+
+# Branding & Appearance (All Editable)
+bot_name: "Advanced Support Bot"
+embed_color: "#5865F2"  # Default Discord Blurple
 footer_text: "Support System © 2025"
+thumbnail_url: ""  # Optional: URL to thumbnail image for embeds
+banner_url: ""  # Optional: URL to banner image for embeds
+
+# Language Settings
+language: "en"  # Current language (en, es, fr, etc.)
+
+# Feature Toggles
+features:
+  ai_responses: false  # Enable AI-powered auto responses
+  auto_close: true  # Auto-close tickets after inactivity
+  working_hours: false  # Restrict ticket creation to working hours
+  ticket_reviews: true  # Ask for feedback after ticket closure
+  transcripts: true  # Generate transcripts on close
+  addons: true  # Load custom addons from /addons folder
+
+# Automation Settings
+automation:
+  inactivity_timeout: 2880  # Minutes (48 hours) before auto-close
+  inactivity_warning: 1440  # Minutes (24 hours) before sending warning
+  staff_reminder_timeout: 60  # Minutes before reminding staff of unanswered ticket
+  max_tickets_per_user: 3  # Maximum open tickets per user
+  ticket_overload_limit: 50  # Send overload notice if more than X tickets open
+
+# Working Hours Configuration
+working_hours:
+  enabled: false
+  timezone: "America/New_York"  # IANA timezone
+  schedule:
+    monday:
+      enabled: true
+      start: "09:00"
+      end: "17:00"
+    tuesday:
+      enabled: true
+      start: "09:00"
+      end: "17:00"
+    wednesday:
+      enabled: true
+      start: "09:00"
+      end: "17:00"
+    thursday:
+      enabled: true
+      start: "09:00"
+      end: "17:00"
+    friday:
+      enabled: true
+      start: "09:00"
+      end: "17:00"
+    saturday:
+      enabled: false
+      start: "10:00"
+      end: "14:00"
+    sunday:
+      enabled: false
+      start: "10:00"
+      end: "14:00"
+
+# Transcript Settings
+transcripts:
+  format: "html"  # Options: html, txt, both
+  send_to_user: true  # DM transcript to user on close
+  send_to_staff_log: true  # Send transcript to log channel
+  include_attachments: true  # Include attachment links in transcript
+
+# AI Response Settings (Optional)
+ai:
+  enabled: false
+  provider: "openai"  # openai, anthropic, etc.
+  api_key: ""  # Use AI_API_KEY environment variable
+  model: "gpt-4"  # Model to use
+  auto_respond_delay: 5  # Seconds to wait before auto-responding
+
+# Priority Colors (Customizable)
+priority_colors:
+  low: "#00ff00"      # Green
+  medium: "#ffff00"   # Yellow
+  high: "#ff8800"     # Orange
+  urgent: "#ff0000"   # Red
+
+# Available Tags (Fully Customizable)
+available_tags:
+  - "Billing"
+  - "Technical"
+  - "Bug Report"
+  - "Feature Request"
+  - "Refund"
+  - "Account Issue"
+  - "Payment"
+  - "Other"
+
+# Messages (Can be customized here or in lang files)
 blacklist_message: "❌ You are blacklisted from creating tickets."
 close_ticket_message: "✅ Ticket closed by {user}."
 ticket_created_message: "🎫 Your ticket has been created!"

@@ -1,0 +1,48 @@
+version: '3.8'
+
+services:
+  discord-bot:
+    build: .
+    container_name: advanced-ticket-bot
+    restart: unless-stopped
+    environment:
+      - NODE_ENV=production
+    env_file:
+      - .env
+    volumes:
+      - ./config.yml:/app/config.yml:ro
+      - ./ticket-panels.yml:/app/ticket-panels.yml:ro
+      - ./lang:/app/lang:ro
+      - ./addons:/app/addons:ro
+      - ./data:/app/data
+      - ./logs:/app/logs
+      - ./transcripts:/app/transcripts
+    networks:
+      - bot-network
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+networks:
+  bot-network:
+    driver: bridge
+
+# Optional: Add a database service if needed
+# services:
+#   postgres:
+#     image: postgres:15-alpine
+#     container_name: ticket-db
+#     restart: unless-stopped
+#     environment:
+#       POSTGRES_DB: tickets
+#       POSTGRES_USER: botuser
+#       POSTGRES_PASSWORD: secure_password
+#     volumes:
+#       - postgres-data:/var/lib/postgresql/data
+#     networks:
+#       - bot-network
+#
+# volumes:
+#   postgres-data:

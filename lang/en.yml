@@ -1,0 +1,157 @@
+# English Language File - Full Support System
+# All text strings for the Discord Ticket Bot
+
+# General Messages
+general:
+  error: "❌ An error occurred. Please try again later."
+  no_permission: "❌ You don't have permission to use this command."
+  invalid_ticket: "❌ This channel is not a ticket."
+  processing: "⏳ Processing your request..."
+  success: "✅ Operation completed successfully!"
+  
+# Ticket Creation
+ticket_create:
+  created: "🎫 Your ticket has been created!"
+  blacklisted: "❌ You are blacklisted from creating tickets."
+  overload_notice: "⚠️ Support is currently experiencing high volume. Your ticket has been created, but response times may be delayed."
+  outside_hours: "⏰ Support is currently offline. Your ticket has been created and will be answered during business hours: {hours}"
+  welcome_title: "Welcome to Support"
+  welcome_description: "Thank you for creating a ticket. A staff member will assist you shortly.\n\n**Ticket ID:** {ticketId}\n**Category:** {category}\n**Priority:** {priority}\n**Created:** {timestamp}"
+  
+# Ticket Management
+ticket_manage:
+  claimed: "✅ This ticket has been claimed by {user}."
+  already_claimed: "❌ This ticket is already claimed by {user}."
+  unclaimed: "✅ Ticket unclaimed successfully."
+  closed: "🔒 Ticket closed by {user}."
+  reopened: "🔓 Ticket reopened by {user}."
+  deleted: "🗑️ Ticket deleted by {user}."
+  locked: "🔒 Ticket locked. Only staff can send messages."
+  unlocked: "🔓 Ticket unlocked."
+  
+# Priority System
+priority:
+  low: "🟢 Low"
+  medium: "🟡 Medium"
+  high: "🟠 High"
+  urgent: "🔴 Urgent"
+  set: "✅ Priority set to **{priority}**"
+  
+# Tags
+tags:
+  added: "🏷️ Tag **{tag}** added to ticket."
+  removed: "🏷️ Tag **{tag}** removed from ticket."
+  list: "**Tags:** {tags}"
+  none: "No tags"
+  
+# Member Management
+members:
+  added: "✅ {user} has been added to this ticket."
+  removed: "✅ {user} has been removed from this ticket."
+  cannot_remove_owner: "❌ You cannot remove the ticket owner."
+  
+# Automation
+automation:
+  inactivity_warning: "⚠️ **Inactivity Warning**\nThis ticket will be automatically closed in **{time}** due to inactivity."
+  auto_closed: "🔒 This ticket was automatically closed due to inactivity."
+  staff_reminder: "📢 **Staff Reminder**\nTicket {ticketId} has been waiting for **{time}** without a response."
+  
+# Feedback & Rating
+feedback:
+  prompt_title: "⭐ Rate Your Experience"
+  prompt_description: "How would you rate the support you received?\n\nPlease select a rating below:"
+  submitted: "✅ Thank you for your feedback!"
+  rating_1: "⭐ Poor"
+  rating_2: "⭐⭐ Fair"
+  rating_3: "⭐⭐⭐ Good"
+  rating_4: "⭐⭐⭐⭐ Very Good"
+  rating_5: "⭐⭐⭐⭐⭐ Excellent"
+  
+# Transcripts
+transcript:
+  generating: "📄 Generating transcript..."
+  generated: "✅ Transcript generated successfully!"
+  sent_dm: "📨 Transcript sent to your DMs."
+  format_html: "HTML"
+  format_txt: "TXT"
+  
+# Logging
+logs:
+  ticket_created: "🎫 **Ticket Created** | {ticketId} by {user}"
+  ticket_closed: "🔒 **Ticket Closed** | {ticketId} by {user}"
+  ticket_reopened: "🔓 **Ticket Reopened** | {ticketId} by {user}"
+  ticket_deleted: "🗑️ **Ticket Deleted** | {ticketId} by {user}"
+  ticket_claimed: "✋ **Ticket Claimed** | {ticketId} by {user}"
+  priority_changed: "🎯 **Priority Changed** | {ticketId} to {priority} by {user}"
+  tag_added: "🏷️ **Tag Added** | {ticketId} - {tag} by {user}"
+  member_added: "➕ **Member Added** | {ticketId} - {member} by {user}"
+  
+# Statistics
+stats:
+  title: "📊 Support Statistics"
+  total_tickets: "Total Tickets"
+  open_tickets: "Open Tickets"
+  closed_tickets: "Closed Tickets"
+  avg_response_time: "Avg Response Time"
+  avg_resolution_time: "Avg Resolution Time"
+  avg_rating: "Avg Rating"
+  top_staff: "Top Staff Member"
+  busiest_category: "Busiest Category"
+  
+# AI System
+ai:
+  enabled: "🤖 AI auto-responses enabled"
+  disabled: "🤖 AI auto-responses disabled"
+  response_prefix: "🤖 **AI Assistant:**"
+  
+# Settings
+settings:
+  title: "⚙️ Ticket System Settings"
+  updated: "✅ Settings updated successfully!"
+  menu_description: "Use the buttons below to configure the ticket system."
+  
+# Blacklist
+blacklist:
+  added: "✅ {user} has been blacklisted."
+  removed: "✅ {user} has been removed from the blacklist."
+  list_title: "📋 Blacklisted Users"
+  list_empty: "No users are currently blacklisted."
+  
+# Panels
+panel:
+  sent: "✅ Ticket panel sent successfully!"
+  not_found: "❌ Panel {number} not found in ticket-panels.yml"
+  
+# Commands Help
+help:
+  ticket_panel: "Send a ticket panel"
+  ticket_claim: "Claim a ticket"
+  ticket_unclaim: "Unclaim a ticket"
+  ticket_close: "Close a ticket"
+  ticket_reopen: "Reopen a closed ticket"
+  ticket_delete: "Delete a ticket"
+  ticket_priority: "Set ticket priority"
+  ticket_tag: "Add/remove tags"
+  ticket_add: "Add a member to ticket"
+  ticket_remove: "Remove a member from ticket"
+  ticket_stats: "View support statistics"
+  ticket_logs: "View recent ticket logs"
+  ticket_settings: "Configure ticket system"
+  ticket_language: "Change bot language"
+  
+# Addon System
+addon:
+  loaded: "✅ Loaded addon: {name}"
+  error: "❌ Error loading addon {name}: {error}"
+  list_title: "🧩 Loaded Addons"
+  none: "No addons loaded"
+  
+# Working Hours
+working_hours:
+  outside: "⏰ Support is currently outside business hours.\n**Hours:** {hours}\nYour ticket will be answered when support is available."
+  
+# Footer Defaults
+footer:
+  default: "Support System © 2025"
+  ticket: "Ticket #{ticketId} • {status}"
+  powered_by: "Powered by Advanced Ticket System v2.0"

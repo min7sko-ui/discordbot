@@ -1,0 +1,52 @@
+# Discord Bot Token
+# Get this from https://discord.com/developers/applications
+DISCORD_TOKEN=your_discord_bot_token_here
+
+# Guild (Server) ID
+GUILD_ID=your_server_id_here
+
+# Channel IDs
+TICKET_CATEGORY_ID=your_ticket_category_id
+FEEDBACK_CHANNEL_ID=your_feedback_channel_id
+TRANSCRIPT_CHANNEL_ID=your_transcript_channel_id
+LOG_CHANNEL_ID=your_log_channel_id
+
+# Staff Role IDs (comma-separated for multiple roles)
+STAFF_ROLES=role_id_1,role_id_2
+
+# AI Settings (Optional - for AI auto-responses)
+AI_PROVIDER=openai
+AI_API_KEY=your_openai_api_key_here
+AI_MODEL=gpt-4
+
+# Database (if using external database)
+DATABASE_URL=postgresql://user:password@localhost:5432/tickets
+
+# Bot Configuration
+BOT_NAME=Advanced Support Bot
+EMBED_COLOR=#5865F2
+FOOTER_TEXT=Support System © 2025
+
+# Language
+LANGUAGE=en
+
+# Timezone (for working hours)
+TIMEZONE=America/New_York
+
+# Feature Flags (true/false)
+ENABLE_AI_RESPONSES=false
+ENABLE_AUTO_CLOSE=true
+ENABLE_WORKING_HOURS=false
+ENABLE_TICKET_REVIEWS=true
+ENABLE_TRANSCRIPTS=true
+ENABLE_ADDONS=true
+
+# Automation Settings (in minutes)
+INACTIVITY_TIMEOUT=2880
+INACTIVITY_WARNING=1440
+STAFF_REMINDER_TIMEOUT=60
+MAX_TICKETS_PER_USER=3
+TICKET_OVERLOAD_LIMIT=50
+
+# Transcript Format (html, txt, or both)
+TRANSCRIPT_FORMAT=html
