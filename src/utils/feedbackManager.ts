@@ -38,15 +38,39 @@ export class FeedbackManager {
   static async sendFeedbackPrompt(user: User, ticketId: string): Promise<void> {
     try {
       const config = ConfigHandler.getConfig();
+      const { EmbedBuilder, ButtonBuilder, ActionRowBuilder, ButtonStyle } = await import('discord.js');
       
       const embed = new EmbedBuilder()
-        .setTitle('⭐ Rate Your Support Experience')
-        .setDescription(config.feedback_prompt_message)
+        .setTitle('⭐ Review Your Ticket')
+        .setDescription('Please rate your support experience!')
         .setColor(config.embed_color)
         .setFooter({ text: config.footer_text })
         .setTimestamp();
 
-      await user.send({ embeds: [embed] });
+      const buttons = new ActionRowBuilder<ButtonBuilder>().addComponents(
+        new ButtonBuilder()
+          .setCustomId(`rating_${ticketId}_1`)
+          .setLabel('⭐')
+          .setStyle(ButtonStyle.Secondary),
+        new ButtonBuilder()
+          .setCustomId(`rating_${ticketId}_2`)
+          .setLabel('⭐⭐')
+          .setStyle(ButtonStyle.Secondary),
+        new ButtonBuilder()
+          .setCustomId(`rating_${ticketId}_3`)
+          .setLabel('⭐⭐⭐')
+          .setStyle(ButtonStyle.Secondary),
+        new ButtonBuilder()
+          .setCustomId(`rating_${ticketId}_4`)
+          .setLabel('⭐⭐⭐⭐')
+          .setStyle(ButtonStyle.Primary),
+        new ButtonBuilder()
+          .setCustomId(`rating_${ticketId}_5`)
+          .setLabel('⭐⭐⭐⭐⭐')
+          .setStyle(ButtonStyle.Success)
+      );
+
+      await user.send({ embeds: [embed], components: [buttons] });
       console.log(chalk.green(`✅ Feedback prompt sent to ${user.tag}`));
     } catch (error) {
       console.error(chalk.red('❌ Error sending feedback prompt:'), error);

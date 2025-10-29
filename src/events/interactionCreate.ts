@@ -213,105 +213,33 @@ async function handleButtonInteraction(interaction: any) {
           console.error(chalk.red('❌ Error deleting channel:'), error);
         }
       }, 5000);
-    } else if (interaction.customId === 'add_member') {
-      await interaction.reply({
-        content: '👤 To add a member, use the channel permissions settings.',
-        ephemeral: true,
-      });
-    } else if (interaction.customId === 'remove_member') {
-      await interaction.reply({
-        content: '🚫 To remove a member, use the channel permissions settings.',
-        ephemeral: true,
-      });
-    } else if (interaction.customId === 'transcript') {
-      const ticket = TicketManager.getTicketByChannel(interaction.channelId);
-      if (!ticket) {
-        await interaction.reply({
-          content: '❌ This channel is not a ticket.',
-          ephemeral: true,
-        });
-        return;
-      }
-
-      await interaction.reply({
-        content: '⌛ Generating transcript...',
-        ephemeral: true,
-      });
-
-      const channel = interaction.channel as TextChannel;
-      const htmlPath = await TranscriptGenerator.generateHTMLTranscript(
-        channel,
-        ticket.ticketId
-      );
-
-      if (htmlPath) {
-        const embed = new EmbedBuilder()
-          .setTitle('📜 Transcript Generated')
-          .setDescription(`**Ticket:** ${ticket.ticketId}`)
-          .setColor(config.embed_color)
-          .setFooter({ text: config.footer_text })
-          .setTimestamp();
-
-        await interaction.editReply({
-          content: '',
-          embeds: [embed],
-          files: [htmlPath],
-        });
-      } else {
-        await interaction.editReply({
-          content: '❌ Failed to generate transcript.',
-        });
-      }
-    } else if (interaction.customId === 'rate_support') {
-      const ticket = TicketManager.getTicketByChannel(interaction.channelId);
-      if (!ticket) {
-        await interaction.reply({
-          content: '❌ This channel is not a ticket.',
-          ephemeral: true,
-        });
-        return;
-      }
-
-      const embed = new EmbedBuilder()
-        .setTitle('⭐ Rate Your Support Experience')
-        .setDescription('Please select your rating:')
-        .setColor(config.embed_color)
-        .setFooter({ text: config.footer_text })
-        .setTimestamp();
-
-      const buttons = new ActionRowBuilder<ButtonBuilder>().addComponents(
-        new ButtonBuilder()
-          .setCustomId(`rating_${ticket.ticketId}_1`)
-          .setLabel('⭐')
-          .setStyle(ButtonStyle.Secondary),
-        new ButtonBuilder()
-          .setCustomId(`rating_${ticket.ticketId}_2`)
-          .setLabel('⭐⭐')
-          .setStyle(ButtonStyle.Secondary),
-        new ButtonBuilder()
-          .setCustomId(`rating_${ticket.ticketId}_3`)
-          .setLabel('⭐⭐⭐')
-          .setStyle(ButtonStyle.Secondary),
-        new ButtonBuilder()
-          .setCustomId(`rating_${ticket.ticketId}_4`)
-          .setLabel('⭐⭐⭐⭐')
-          .setStyle(ButtonStyle.Primary),
-        new ButtonBuilder()
-          .setCustomId(`rating_${ticket.ticketId}_5`)
-          .setLabel('⭐⭐⭐⭐⭐')
-          .setStyle(ButtonStyle.Success)
-      );
-
-      await interaction.reply({
-        embeds: [embed],
-        components: [buttons],
-        ephemeral: true,
-      });
     } else if (interaction.customId.startsWith('rating_')) {
       const [, ticketId, ratingStr] = interaction.customId.split('_');
       const rating = parseInt(ratingStr);
 
-      const feedbackChannel = await interaction.guild.channels.fetch(
+      const allTickets = TicketManager.getAllTickets();
+      const ticketData = allTickets[ticketId];
+      
+      if (!ticketData) {
+        await interaction.update({
+          content: '❌ Ticket not found.',
+          embeds: [],
+          components: [],
+        });
+        return;
+      }
+
+      const guild = interaction.client.guilds.cache.get(ticketData.guildId);
+      if (!guild) {
+        await interaction.update({
+          content: '❌ Unable to process feedback at this time.',
+          embeds: [],
+          components: [],
+        });
+        return;
+      }
+
+      const feedbackChannel = await guild.channels.fetch(
         config.feedback_channel_id
       ) as TextChannel;
 

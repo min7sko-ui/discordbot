@@ -16,6 +16,7 @@ import chalk from 'chalk';
 interface TicketData {
   channelId: string;
   userId: string;
+  guildId: string;
   category: string;
   createdAt: string;
   closedAt?: string;
@@ -95,6 +96,7 @@ export class TicketManager {
       tickets[ticketId] = {
         channelId: channel.id,
         userId: user.id,
+        guildId: guild.id,
         category,
         createdAt: new Date().toISOString(),
         status: 'open',
@@ -115,27 +117,7 @@ export class TicketManager {
           .setCustomId('close_ticket')
           .setLabel('Close Ticket')
           .setEmoji('🔒')
-          .setStyle(ButtonStyle.Danger),
-        new ButtonBuilder()
-          .setCustomId('add_member')
-          .setLabel('Add Member')
-          .setEmoji('👤')
-          .setStyle(ButtonStyle.Primary),
-        new ButtonBuilder()
-          .setCustomId('remove_member')
-          .setLabel('Remove Member')
-          .setEmoji('🚫')
-          .setStyle(ButtonStyle.Secondary),
-        new ButtonBuilder()
-          .setCustomId('transcript')
-          .setLabel('Transcript')
-          .setEmoji('📜')
-          .setStyle(ButtonStyle.Secondary),
-        new ButtonBuilder()
-          .setCustomId('rate_support')
-          .setLabel('Rate Support')
-          .setEmoji('⭐')
-          .setStyle(ButtonStyle.Success)
+          .setStyle(ButtonStyle.Danger)
       );
 
       await channel.send({ embeds: [embed], components: [buttons] });
