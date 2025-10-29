@@ -1,0 +1,47 @@
+panels:
+  1:
+    title: "🎟️ Support Tickets"
+    description: "Need help? Choose your issue below!"
+    color: "#5865F2"
+    footer: "Support Center © 2025"
+    emoji: "🎫"
+    categories:
+      - label: "💬 General Support"
+        description: "Ask general questions"
+        emoji: "💬"
+        modal:
+          title: "Open Support Ticket"
+          questions:
+            - label: "Describe your issue"
+              style: "paragraph"
+              required: true
+            - label: "Your username (optional)"
+              style: "short"
+              required: false
+      - label: "🛑 Report"
+        description: "Report a user or bug"
+        emoji: "🛑"
+        modal:
+          title: "Report Form"
+          questions:
+            - label: "Who/what are you reporting?"
+              style: "short"
+              required: true
+            - label: "Details"
+              style: "paragraph"
+              required: true
+      - label: "📝 Application"
+        description: "Submit an application"
+        emoji: "📝"
+        modal:
+          title: "Application Form"
+          questions:
+            - label: "Position applying for"
+              style: "short"
+              required: true
+            - label: "Why should we accept you?"
+              style: "paragraph"
+              required: true
+            - label: "Your experience"
+              style: "paragraph"
+              required: false

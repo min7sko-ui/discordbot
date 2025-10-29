@@ -1,0 +1,8 @@
+node_modules/
+dist/
+.env
+*.log
+data/*.json
+data/transcripts/*.html
+data/transcripts/*.txt
+.DS_Store
