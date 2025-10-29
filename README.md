@@ -7,8 +7,9 @@ A professional, production-ready Discord ticket bot built in TypeScript with ful
 - **Fully Customizable Ticket Panels** - Define ticket categories and modal questions in `ticket-panels.yml`
 - **Dynamic Modal Forms** - Create custom forms with short and paragraph text inputs
 - **Private Ticket Channels** - Automatically creates channels with staff and user access
-- **5-Star Feedback System** - Collects user ratings after ticket closure via DM
-- **HTML/TXT Transcripts** - Generates beautiful transcripts with full message history
+- **Staff Ticket Management** - Add/remove members from tickets using commands
+- **5-Star Feedback System** - Users receive DM with review embed and rating buttons after ticket closure
+- **Auto-Generated Transcripts** - HTML transcripts automatically generated and sent to transcript channel when tickets close
 - **User Blacklist** - Prevent abuse with blacklist management commands
 - **Live Configuration Reload** - Update settings without restarting the bot
 - **Professional UI/UX** - Discord's blurple theme with consistent embeds and emojis
@@ -52,6 +53,8 @@ npm start
 | Command | Description |
 |---------|-------------|
 | `/ticket panel send <number>` | Send a ticket panel from ticket-panels.yml |
+| `/ticket add <user>` | Add a member to the current ticket (staff only) |
+| `/ticket remove <user>` | Remove a member from the current ticket (staff only) |
 | `/close` | Close the current ticket (staff only) |
 | `/blacklist add <user> [reason]` | Add user to blacklist |
 | `/blacklist remove <user>` | Remove user from blacklist |
@@ -59,6 +62,27 @@ npm start
 | `/reload` | Reload configuration files |
 | `/feedback` | View feedback statistics |
 | `/transcript` | Generate transcript for current ticket |
+
+## 🎯 How It Works
+
+### Ticket Flow
+1. Staff sends a ticket panel using `/ticket panel send 1`
+2. Users select a category from the dropdown
+3. A modal form appears with custom questions
+4. User submits the form, and a private ticket channel is created
+5. Staff and user can communicate in the ticket channel
+
+### Closing Tickets
+1. Staff clicks the "Close Ticket" button or uses `/close`
+2. An HTML transcript is automatically generated and sent to the transcript channel
+3. The user receives a DM with a "Review Your Ticket" embed containing 5 star rating buttons
+4. User clicks a rating button, and feedback is recorded in the feedback channel
+5. The ticket channel is deleted after 5 seconds
+
+### Managing Ticket Access
+- Use `/ticket add @user` to give someone access to the ticket
+- Use `/ticket remove @user` to remove someone from the ticket
+- The ticket owner cannot be removed
 
 ## 📁 Project Structure
 
