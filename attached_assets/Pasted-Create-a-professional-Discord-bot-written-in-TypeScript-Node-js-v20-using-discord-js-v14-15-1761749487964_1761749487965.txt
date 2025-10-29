@@ -1,0 +1,223 @@
+Create a professional Discord bot written in **TypeScript** (Node.js v20+) using **discord.js v14.15+** that provides a **complete, elegant, fully-configurable ticket system** inspired by Plex Tickets.
+
+---
+
+# 🎟️ MAIN PURPOSE
+The bot will handle support tickets with dropdown panels, modals, transcripts, feedback, blacklists, and full customization through YAML config files.
+
+Everything must be editable and modular.
+
+---
+
+## 🧩 CORE FEATURES
+
+### 🎫 Ticket System
+- Users open tickets through a **ticket panel embed** with dropdown categories (Support, Report, Application, etc.).
+- Ticket panels and modals are defined in a `ticket-panels.yml` file.
+- Example structure of `ticket-panels.yml`:
+
+```yaml
+panels:
+  1:
+    title: "🎟️ Support Tickets"
+    description: "Need help? Choose your issue below!"
+    color: "#5865F2"
+    footer: "Support Center © 2025"
+    emoji: "🎫"
+    categories:
+      - label: "💬 General Support"
+        description: "Ask general questions"
+        emoji: "💬"
+        modal:
+          title: "Open Support Ticket"
+          questions:
+            - label: "Describe your issue"
+              style: "paragraph"
+              required: true
+            - label: "Your username (optional)"
+              style: "short"
+              required: false
+      - label: "🛑 Report"
+        description: "Report a user or bug"
+        emoji: "🛑"
+        modal:
+          title: "Report Form"
+          questions:
+            - label: "Who/what are you reporting?"
+              style: "short"
+              required: true
+            - label: "Details"
+              style: "paragraph"
+              required: true
+Admins can edit, add, or remove panels freely.
+Then, they can send a panel using /ticket panel send <panel_number>.
+
+When a user selects a dropdown option, a modal opens with the configured questions.
+After submission, a private ticket channel is created (visible to staff roles + user).
+The channel embed should have buttons:
+
+🔒 Close Ticket
+
+👤 Add Member
+
+🚫 Remove Member
+
+📜 Transcript
+
+⭐ Rate Support (manual feedback trigger)
+
+⭐ Feedback System
+When a ticket is closed, the user receives a DM:
+
+“Please rate your support experience!”
+
+Include 5 star buttons (⭐, ⭐⭐, ⭐⭐⭐, ⭐⭐⭐⭐, ⭐⭐⭐⭐⭐).
+When the user selects a rating:
+
+Send the result to the configured feedback channel.
+
+Store it in data/feedback.json or SQLite.
+
+📜 Transcripts
+When a ticket closes:
+
+Generate an HTML or TXT transcript of the ticket channel.
+
+Upload it automatically to the configured transcript log channel.
+
+Include metadata (user, staff, reason, timestamps).
+
+🛑 Blacklist System
+Admins can prevent specific users from opening tickets:
+
+/blacklist add @user [reason]
+
+/blacklist remove @user
+
+/blacklist list
+
+If a blacklisted user tries to open a ticket:
+
+“❌ You are blacklisted from creating tickets.”
+
+Data is stored in data/blacklist.json.
+
+⚙️ Config & Customization
+Use a main config.yml file:
+
+yaml
+Kopírovať kód
+token: "BOT_TOKEN"
+guild_id: "1234567890"
+
+staff_roles:
+  - "1234567890"
+
+ticket_category_id: "1234567890"
+feedback_channel_id: "1234567890"
+transcript_channel_id: "1234567890"
+
+embed_color: "#5865F2"
+footer_text: "Support System © 2025"
+blacklist_message: "❌ You are blacklisted from creating tickets."
+Everything must be editable in the config, including:
+
+Embed titles
+
+Colors
+
+Descriptions
+
+Footers
+
+Emojis
+
+Messages
+
+⚙️ Slash Commands
+Command	Description
+/ticket panel send <number>	Sends the ticket panel defined in ticket-panels.yml.
+/close	Close a ticket (staff only).
+/blacklist add <user> [reason]	Add user to blacklist.
+/blacklist remove <user>	Remove from blacklist.
+/blacklist list	Show blacklisted users.
+/reload	Reload config and panels without restarting.
+/feedback	Send feedback prompt manually.
+/transcript	Generate or resend transcript.
+
+⚙️ Data & Structure
+Use this structure:
+
+pgsql
+Kopírovať kód
+src/
+├─ commands/
+│  ├─ ticketPanel.ts
+│  ├─ close.ts
+│  ├─ blacklist.ts
+│  ├─ feedback.ts
+│  ├─ transcript.ts
+│  ├─ reload.ts
+├─ events/
+│  ├─ ready.ts
+│  ├─ interactionCreate.ts
+├─ utils/
+│  ├─ ticketManager.ts
+│  ├─ feedbackManager.ts
+│  ├─ blacklistManager.ts
+│  ├─ transcriptGenerator.ts
+│  ├─ configHandler.ts
+├─ data/
+│  ├─ tickets.json
+│  ├─ blacklist.json
+│  ├─ feedback.json
+│  ├─ transcripts/
+├─ config.yml
+├─ ticket-panels.yml
+├─ index.ts
+⚙️ Technical Requirements
+Use TypeScript (strict mode ON)
+
+Use discord.js v14.15+
+
+Use js-yaml for YAML
+
+Use better-sqlite3 or JSON for data
+
+Auto deploy slash commands at startup
+
+All responses via embeds with timestamps and color styling
+
+Fully commented, modular code
+
+Error handling with colorized console output
+
+Config reload support without restart
+
+Compatible with Replit deployment
+
+🎨 Design Guidelines
+Use Discord’s blurple (#5865F2) as default color.
+
+Embeds should have consistent headers, emojis, and footers.
+
+Make everything responsive — works perfectly on desktop and mobile.
+
+Use ephemeral replies where appropriate.
+
+Include loading indicators (⌛) and confirmations (✅).
+
+✅ End Goal
+Deliver a beautiful, production-ready, fully editable Discord Ticket Bot built in TypeScript, with:
+
+Complete modular structure
+
+Editable ticket-panels.yml (for modals, questions, embeds)
+
+Full feedback, blacklist, and transcript systems
+
+Slash command management
+
+Elegant and professional UI/UX
+
+YAML-driven customization
