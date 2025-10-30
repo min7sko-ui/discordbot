@@ -1,10 +1,66 @@
+# Advanced Discord Ticket Bot - Panel Configuration
+# You can create as many panels as you want!
+# Each panel can have its own settings, channels, and customization
+
 panels:
+  # Panel 1 - General Support
   1:
+    # Panel Appearance
     title: "🎟️ Ticket Support"
     description: "Need help? \n Choose your issue below!"
     color: "#5865F2"
     footer: "Support Center © 2025"
     emoji: "🎫"
+    thumbnail: ""  # Optional: URL to thumbnail image
+    image: ""  # Optional: URL to banner image
+    author:
+      name: ""  # Optional: Author name to display
+      icon_url: ""  # Optional: Author icon URL
+    
+    # Per-Panel Channel Settings
+    ticket_category_id: "1170748792660820094"  # Category where tickets will be created
+    log_channel_id: "1170748792660820096"  # Channel for ticket logs
+    transcript_channel_id: "1170748792660820096"  # Channel for transcripts
+    
+    # Working Hours Configuration for this panel
+    working_hours:
+      enabled: true  # Enable working hours restriction
+      timezone: "Europe/Bratislava"  # IANA timezone
+      message:
+        title: "⏰ Outside Working Hours"
+        description: "Thank you for contacting support! We're currently outside of our working hours.\n\nOur support team is available during:\n**Monday-Friday:** 09:00 - 17:00\n**Saturday-Sunday:** Closed\n\nYour ticket will be created, but response times may be delayed until we return."
+        color: "#FFA500"
+      schedule:
+        monday:
+          enabled: true
+          start: "09:00"
+          end: "17:00"
+        tuesday:
+          enabled: true
+          start: "09:00"
+          end: "17:00"
+        wednesday:
+          enabled: true
+          start: "09:00"
+          end: "17:00"
+        thursday:
+          enabled: true
+          start: "09:00"
+          end: "17:00"
+        friday:
+          enabled: true
+          start: "09:00"
+          end: "17:00"
+        saturday:
+          enabled: false
+          start: "10:00"
+          end: "14:00"
+        sunday:
+          enabled: false
+          start: "10:00"
+          end: "14:00"
+    
+    # Ticket Categories for this panel
     categories:
       - label: "💬 General Support"
         description: "Ask general questions"
@@ -45,4 +101,81 @@ panels:
             - label: "Your experience"
               style: "paragraph"
               required: false
-            
+
+  # Panel 2 - VIP Support (Example of second panel)
+  2:
+    # Panel Appearance
+    title: "👑 VIP Support"
+    description: "Premium support for VIP members"
+    color: "#FFD700"
+    footer: "VIP Support © 2025"
+    emoji: "👑"
+    thumbnail: ""
+    image: ""
+    author:
+      name: "VIP Support Team"
+      icon_url: ""
+    
+    # Per-Panel Channel Settings
+    ticket_category_id: "1170748792660820094"
+    log_channel_id: "1170748792660820096"
+    transcript_channel_id: "1170748792660820096"
+    
+    # Working Hours Configuration
+    working_hours:
+      enabled: false  # VIP support available 24/7
+      timezone: "Europe/Bratislava"
+      message:
+        title: "⏰ Outside Working Hours"
+        description: "VIP support is available 24/7!"
+        color: "#FFD700"
+      schedule:
+        monday:
+          enabled: true
+          start: "00:00"
+          end: "23:59"
+        tuesday:
+          enabled: true
+          start: "00:00"
+          end: "23:59"
+        wednesday:
+          enabled: true
+          start: "00:00"
+          end: "23:59"
+        thursday:
+          enabled: true
+          start: "00:00"
+          end: "23:59"
+        friday:
+          enabled: true
+          start: "00:00"
+          end: "23:59"
+        saturday:
+          enabled: true
+          start: "00:00"
+          end: "23:59"
+        sunday:
+          enabled: true
+          start: "00:00"
+          end: "23:59"
+    
+    # Ticket Categories
+    categories:
+      - label: "⚡ Priority Issue"
+        description: "Report urgent issues"
+        emoji: "⚡"
+        modal:
+          title: "VIP Priority Ticket"
+          questions:
+            - label: "Describe your urgent issue"
+              style: "paragraph"
+              required: true
+      - label: "💎 VIP Request"
+        description: "Special requests for VIP members"
+        emoji: "💎"
+        modal:
+          title: "VIP Request Form"
+          questions:
+            - label: "What can we help you with?"
+              style: "paragraph"
+              required: true
