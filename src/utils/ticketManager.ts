@@ -99,11 +99,12 @@ export class TicketManager {
 
       // Add staff roles only if they exist in the guild
       for (const roleId of config.staff_roles) {
-        if (roleId && roleId.trim()) {
-          const role = guild.roles.cache.get(roleId);
+        const roleIdStr = String(roleId).trim();
+        if (roleIdStr) {
+          const role = guild.roles.cache.get(roleIdStr);
           if (role) {
             permissionOverwrites.push({
-              id: roleId,
+              id: roleIdStr,
               allow: [
                 PermissionFlagsBits.ViewChannel,
                 PermissionFlagsBits.SendMessages,
@@ -113,7 +114,7 @@ export class TicketManager {
               ],
             });
           } else {
-            console.warn(chalk.yellow(`⚠️ Staff role ${roleId} not found in guild, skipping...`));
+            console.warn(chalk.yellow(`⚠️ Staff role ${roleIdStr} not found in guild, skipping...`));
           }
         }
       }
