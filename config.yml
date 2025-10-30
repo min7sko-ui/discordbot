@@ -43,8 +43,8 @@ automation:
 
 # Working Hours Configuration
 working_hours:
-  enabled: false
-  timezone: "America/New_York"  # IANA timezone
+  enabled: true  # Enable working hours restriction
+  timezone: "Europe/Bratislava"  # IANA timezone
   schedule:
     monday:
       enabled: true

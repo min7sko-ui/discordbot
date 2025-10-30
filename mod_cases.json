@@ -1,0 +1,59 @@
+{
+  "cases": [
+    [
+      "CASE-000001",
+      {
+        "id": "CASE-000001",
+        "type": "CLEAR",
+        "moderator": {
+          "id": "970703957599068240",
+          "tag": "qewixikk"
+        },
+        "target": {
+          "id": "970703957599068240",
+          "tag": "qewixikk"
+        },
+        "reason": "Cleared 10 messages",
+        "duration": null,
+        "timestamp": "2025-10-30T13:14:44.250Z"
+      }
+    ],
+    [
+      "CASE-000002",
+      {
+        "id": "CASE-000002",
+        "type": "WARN",
+        "moderator": {
+          "id": "970703957599068240",
+          "tag": "qewixikk"
+        },
+        "target": {
+          "id": "970703957599068240",
+          "tag": "qewixikk"
+        },
+        "reason": "No reason provided",
+        "duration": null,
+        "timestamp": "2025-10-30T13:14:50.835Z"
+      }
+    ],
+    [
+      "CASE-000003",
+      {
+        "id": "CASE-000003",
+        "type": "SLOWMODE",
+        "moderator": {
+          "id": "970703957599068240",
+          "tag": "qewixikk"
+        },
+        "target": {
+          "id": "970703957599068240",
+          "tag": "qewixikk"
+        },
+        "reason": "Set slowmode to 3s",
+        "duration": null,
+        "timestamp": "2025-10-30T13:15:05.474Z"
+      }
+    ]
+  ],
+  "counter": 4
+}
