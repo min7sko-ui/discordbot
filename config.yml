@@ -1,6 +1,7 @@
 # Advanced Discord Ticket Bot Configuration
 # All settings are editable and customizable
 # IMPORTANT: Sensitive values like tokens should be in .env file, not here!
+# NOTE: Channel settings (category, logs, transcripts) are now per-panel in ticket-panels.yml
 
 # Discord Bot Settings (Use environment variables for sensitive data)
 token: "MTI0OTI1ODk2NjIzMjQ2OTUwNg.GIcNLf.BOEg67zH2TN2whhU6OZe53bJHq_H50eYnb4g8c"  # Leave empty - set DISCORD_TOKEN in .env file
@@ -8,11 +9,7 @@ guild_id: "1170748791616450652"  # Set GUILD_ID in .env file
 
 # Staff & Channel Configuration
 staff_roles: [1170748791616450660]  # Add staff role IDs here or use STAFF_ROLES env var
-
-ticket_category_id: "1170748792660820094"  # Set TICKET_CATEGORY_ID in .env
 feedback_channel_id: "1170748792660820096"  # Set FEEDBACK_CHANNEL_ID in .env
-transcript_channel_id: "1170748792660820096"  # Set TRANSCRIPT_CHANNEL_ID in .env
-log_channel_id: "1170748792660820096"  # Set LOG_CHANNEL_ID in .env
 
 # Branding & Appearance (All Editable)
 bot_name: "Advanced Support Bot"
@@ -28,52 +25,18 @@ language: "en"  # Current language (en, es, fr, etc.)
 features:
   ai_responses: false  # Enable AI-powered auto responses
   auto_close: true  # Auto-close tickets after inactivity
-  working_hours: false  # Restrict ticket creation to working hours
   ticket_reviews: true  # Ask for feedback after ticket closure
   transcripts: true  # Generate transcripts on close
   addons: true  # Load custom addons from /addons folder
 
 # Automation Settings
+# New system: User inactive for 12h → ping warning → 2h grace period → auto-close
 automation:
-  inactivity_timeout: 2880  # Minutes (48 hours) before auto-close
-  inactivity_warning: 1440  # Minutes (24 hours) before sending warning
+  inactivity_timeout: 720  # Minutes (12 hours) before warning
+  inactivity_warning_grace: 120  # Minutes (2 hours) grace period after warning
   staff_reminder_timeout: 60  # Minutes before reminding staff of unanswered ticket
   max_tickets_per_user: 3  # Maximum open tickets per user
   ticket_overload_limit: 50  # Send overload notice if more than X tickets open
-
-# Working Hours Configuration
-working_hours:
-  enabled: true  # Enable working hours restriction
-  timezone: "Europe/Bratislava"  # IANA timezone
-  schedule:
-    monday:
-      enabled: true
-      start: "09:00"
-      end: "17:00"
-    tuesday:
-      enabled: true
-      start: "09:00"
-      end: "17:00"
-    wednesday:
-      enabled: true
-      start: "09:00"
-      end: "17:00"
-    thursday:
-      enabled: true
-      start: "09:00"
-      end: "17:00"
-    friday:
-      enabled: true
-      start: "09:00"
-      end: "17:00"
-    saturday:
-      enabled: false
-      start: "10:00"
-      end: "14:00"
-    sunday:
-      enabled: false
-      start: "10:00"
-      end: "14:00"
 
 # Transcript Settings
 transcripts:
