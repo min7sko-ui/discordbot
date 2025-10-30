@@ -320,17 +320,18 @@ async function handleButtonInteraction(interaction: any) {
       });
 
       const channel = interaction.channel as TextChannel;
+      const panels = ConfigHandler.getPanels();
+      const panel = panels.panels[ticket.data.panelNumber];
       
-      // Generate transcript if enabled
-      if (config.features?.transcripts) {
+      if (config.features?.transcripts && panel?.transcript_channel_id) {
         const transcriptPath = await TranscriptGenerator.generateHTMLTranscript(
           channel,
           ticket.ticketId
         );
 
-        if (transcriptPath && config.transcript_channel_id) {
+        if (transcriptPath) {
           const transcriptChannel = await interaction.guild.channels.fetch(
-            config.transcript_channel_id
+            panel.transcript_channel_id
           ) as TextChannel;
 
           if (transcriptChannel) {
@@ -467,14 +468,17 @@ async function handleButtonInteraction(interaction: any) {
       });
 
       const channel = interaction.channel as TextChannel;
+      const panels = ConfigHandler.getPanels();
+      const panel = panels.panels[ticket.data.panelNumber];
+      
       const transcriptPath = await TranscriptGenerator.generateHTMLTranscript(
         channel,
         ticket.ticketId
       );
 
-      if (transcriptPath && config.transcript_channel_id) {
+      if (transcriptPath && panel?.transcript_channel_id) {
         const transcriptChannel = await interaction.guild.channels.fetch(
-          config.transcript_channel_id
+          panel.transcript_channel_id
         ) as TextChannel;
 
         if (transcriptChannel) {
@@ -493,11 +497,11 @@ async function handleButtonInteraction(interaction: any) {
           });
 
           await interaction.editReply({
-            content: `✅ Transcript generated and sent to <#${config.transcript_channel_id}>`,
+            content: `✅ Transcript generated and sent to <#${panel.transcript_channel_id}>`,
           });
         } else {
           await interaction.editReply({
-            content: '❌ Transcript channel not found. Please check config.',
+            content: '❌ Transcript channel not found. Please check panel config.',
           });
         }
       } else {

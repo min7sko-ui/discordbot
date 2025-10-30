@@ -55,6 +55,45 @@ export class TicketManager {
     }
   }
 
+  static checkWorkingHours(panelNumber: number): { isOutsideHours: boolean; embed?: EmbedBuilder } {
+    const panels = ConfigHandler.getPanels();
+    const panel = panels.panels[panelNumber];
+    
+    if (!panel || !panel.working_hours?.enabled) {
+      return { isOutsideHours: false };
+    }
+
+    const now = new Date();
+    const dayName = now.toLocaleDateString('en-US', { weekday: 'long' }).toLowerCase() as keyof typeof panel.working_hours.schedule;
+    const daySchedule = panel.working_hours.schedule[dayName];
+
+    if (!daySchedule?.enabled) {
+      const embed = new EmbedBuilder()
+        .setTitle(panel.working_hours.message.title)
+        .setDescription(panel.working_hours.message.description)
+        .setColor(panel.working_hours.message.color as any)
+        .setTimestamp();
+      return { isOutsideHours: true, embed };
+    }
+
+    const currentTime = now.toLocaleTimeString('en-US', {
+      hour12: false,
+      hour: '2-digit',
+      minute: '2-digit',
+    });
+
+    if (currentTime < daySchedule.start || currentTime > daySchedule.end) {
+      const embed = new EmbedBuilder()
+        .setTitle(panel.working_hours.message.title)
+        .setDescription(panel.working_hours.message.description)
+        .setColor(panel.working_hours.message.color as any)
+        .setTimestamp();
+      return { isOutsideHours: true, embed };
+    }
+
+    return { isOutsideHours: false };
+  }
+
   static async createTicket(
     guild: Guild,
     user: User,
@@ -66,21 +105,21 @@ export class TicketManager {
   ): Promise<TextChannel | null> {
     try {
       const config = ConfigHandler.getConfig();
+      const panels = ConfigHandler.getPanels();
+      const panel = panels.panels[panelNumber];
       const tickets = this.loadTickets();
 
-      // Check max tickets per user
       const userTickets = Object.values(tickets).filter(
         t => t.userId === user.id && (t.status === TicketStatus.OPEN || t.status === TicketStatus.CLAIMED)
       );
 
       if (userTickets.length >= config.automation.max_tickets_per_user) {
-        return null; // Max tickets reached
+        return null;
       }
 
       const ticketNumber = Object.keys(tickets).length + 1;
       const ticketId = `ticket-${ticketNumber.toString().padStart(4, '0')}`;
 
-      // Build permission overwrites with validation
       const permissionOverwrites: any[] = [
         {
           id: guild.id,
@@ -97,7 +136,6 @@ export class TicketManager {
         },
       ];
 
-      // Add staff roles only if they exist in the guild
       for (const roleId of config.staff_roles) {
         const roleIdStr = String(roleId).trim();
         if (roleIdStr) {
@@ -122,7 +160,7 @@ export class TicketManager {
       const channel = await guild.channels.create({
         name: `${ticketId}-${user.username}`,
         type: ChannelType.GuildText,
-        parent: config.ticket_category_id,
+        parent: panel.ticket_category_id,
         permissionOverwrites,
       });
 
@@ -151,7 +189,6 @@ export class TicketManager {
       tickets[ticketId] = ticketData;
       this.saveTickets(tickets);
 
-      // Create welcome embed
       const embed = new EmbedBuilder()
         .setTitle(Lang.t('ticket_create.welcome_title'))
         .setDescription(
@@ -162,12 +199,19 @@ export class TicketManager {
             timestamp: `<t:${Math.floor(Date.now() / 1000)}:R>`,
           }) + `\n\n**${category}**\n${answers.map((a, i) => `**Q${i + 1}:** ${a}`).join('\n\n')}`
         )
-        .setColor(config.embed_color as any)
+        .setColor(panel.color as any)
         .setFooter({ text: Lang.t('footer.ticket', { ticketId, status: 'Open' }) })
         .setTimestamp();
 
-      if (config.thumbnail_url) {
-        embed.setThumbnail(config.thumbnail_url);
+      if (panel.thumbnail) {
+        embed.setThumbnail(panel.thumbnail);
+      }
+
+      if (panel.author?.name) {
+        embed.setAuthor({
+          name: panel.author.name,
+          iconURL: panel.author.icon_url,
+        });
       }
 
       const buttons = new ActionRowBuilder<ButtonBuilder>().addComponents(
@@ -195,11 +239,14 @@ export class TicketManager {
 
       const embedMessage = await channel.send({ content: `${user}`, embeds: [embed], components: [buttons] });
 
-      // Store the embed message ID for future updates
       ticketData.embedMessageId = embedMessage.id;
       this.saveTickets(tickets);
 
-      // Log creation
+      const workingHoursCheck = this.checkWorkingHours(panelNumber);
+      if (workingHoursCheck.isOutsideHours && workingHoursCheck.embed) {
+        await channel.send({ embeds: [workingHoursCheck.embed] });
+      }
+
       Logger.log(
         LogType.TICKET_CREATED,
         user.id,
@@ -208,7 +255,7 @@ export class TicketManager {
         ticketId
       );
 
-      if (client) {
+      if (client && panel.log_channel_id) {
         await Logger.sendToLogChannel(client, {
           timestamp: Date.now(),
           type: LogType.TICKET_CREATED,
@@ -216,7 +263,7 @@ export class TicketManager {
           username: user.username,
           details: `Created ticket ${ticketId} in category: ${category}`,
           ticketId,
-        });
+        }, panel.log_channel_id);
       }
 
       console.log(chalk.green(`✅ Ticket ${ticketId} created for ${user.tag}`));
@@ -236,7 +283,7 @@ export class TicketManager {
     }
 
     if (ticket.claimedBy) {
-      return false; // Already claimed
+      return false;
     }
 
     ticket.claimedBy = userId;
@@ -355,7 +402,8 @@ export class TicketManager {
 
     ticket.messages.push(message);
     ticket.lastActivity = Date.now();
-    ticket.inactivityWarned = false; // Reset warning flag
+    ticket.inactivityWarned = false;
+    delete ticket.inactivityWarningTime;
     this.saveTickets(tickets);
   }
 
@@ -488,6 +536,7 @@ export class TicketManager {
 
     if (ticket) {
       ticket.inactivityWarned = true;
+      ticket.inactivityWarningTime = Date.now();
       this.saveTickets(tickets);
     }
   }

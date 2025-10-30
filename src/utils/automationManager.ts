@@ -1,6 +1,7 @@
 import { Client, TextChannel, EmbedBuilder } from 'discord.js';
 import { TicketManager } from './ticketManager.js';
 import { ConfigHandler } from './configHandler.js';
+import { TranscriptGenerator } from './transcriptGenerator.js';
 import { Lang } from './languageManager.js';
 import { Logger } from './logger.js';
 import { LogType } from '../types/index.js';
@@ -11,10 +12,9 @@ export class AutomationManager {
 
   static startMonitoring(client: Client): void {
     if (this.checkInterval) {
-      return; // Already running
+      return;
     }
 
-    // Check every 5 minutes
     this.checkInterval = setInterval(() => {
       this.checkInactivity(client);
       this.checkStaffResponse(client);
@@ -34,15 +34,16 @@ export class AutomationManager {
   private static async checkInactivity(client: Client): Promise<void> {
     try {
       const config = ConfigHandler.getConfig();
+      const panels = ConfigHandler.getPanels();
       
       if (!config.features.auto_close) {
         return;
       }
 
-      const warningMinutes = config.automation.inactivity_warning;
-      const closeMinutes = config.automation.inactivity_timeout;
+      const warningMinutes = config.automation.inactivity_timeout;
+      const graceMinutes = config.automation.inactivity_warning_grace;
+      const totalMinutes = warningMinutes + graceMinutes;
 
-      // Get tickets that need warnings
       const ticketsToWarn = TicketManager.getInactiveTickets(warningMinutes).filter(
         t => !t.inactivityWarned
       );
@@ -52,19 +53,17 @@ export class AutomationManager {
           const channel = await client.channels.fetch(ticket.channelId) as TextChannel;
           if (!channel) continue;
 
-          const timeRemaining = closeMinutes - warningMinutes;
-          
           const embed = new EmbedBuilder()
             .setTitle('⚠️ Inactivity Warning')
             .setDescription(
-              Lang.t('automation.inactivity_warning', {
-                time: `${timeRemaining} minutes`,
-              })
+              `<@${ticket.userId}> This ticket has been inactive for ${warningMinutes / 60} hours.\n\n` +
+              `⏰ This ticket will be automatically closed in **${graceMinutes / 60} hours** if there is no response.\n\n` +
+              `Please respond if you still need assistance.`
             )
             .setColor('#FFA500')
             .setTimestamp();
 
-          await channel.send({ embeds: [embed] });
+          await channel.send({ content: `<@${ticket.userId}>`, embeds: [embed] });
           TicketManager.setInactivityWarned(ticket.ticketId);
           
           console.log(chalk.yellow(`⚠️ Inactivity warning sent for ${ticket.ticketId}`));
@@ -73,19 +72,64 @@ export class AutomationManager {
         }
       }
 
-      // Get tickets to auto-close
-      const ticketsToClose = TicketManager.getInactiveTickets(closeMinutes).filter(
-        t => t.inactivityWarned
-      );
+      const ticketsToClose = TicketManager.getAllTickets().filter(ticket => {
+        if (!ticket.inactivityWarned || ticket.status === 'closed') {
+          return false;
+        }
+        
+        if (!ticket.inactivityWarningTime) {
+          return false;
+        }
+
+        const timeSinceWarning = Date.now() - ticket.inactivityWarningTime;
+        const gracePeriodMs = graceMinutes * 60 * 1000;
+        
+        return timeSinceWarning >= gracePeriodMs;
+      });
 
       for (const ticket of ticketsToClose) {
         try {
           const channel = await client.channels.fetch(ticket.channelId) as TextChannel;
           if (!channel) continue;
 
+          const panel = panels.panels[ticket.panelNumber];
+          
+          if (config.features?.transcripts && panel?.transcript_channel_id) {
+            const transcriptPath = await TranscriptGenerator.generateHTMLTranscript(
+              channel,
+              ticket.ticketId
+            );
+
+            if (transcriptPath) {
+              const transcriptChannel = await client.channels.fetch(
+                panel.transcript_channel_id
+              ) as TextChannel;
+
+              if (transcriptChannel) {
+                const embed = new EmbedBuilder()
+                  .setTitle(`📜 Auto-Closed Ticket Transcript: ${ticket.ticketId}`)
+                  .setDescription(
+                    `**User:** <@${ticket.userId}>\n**Category:** ${ticket.category}\n**Reason:** Inactivity (${totalMinutes / 60}h no response)`
+                  )
+                  .setColor(config.embed_color as any)
+                  .setFooter({ text: config.footer_text })
+                  .setTimestamp();
+
+                await transcriptChannel.send({
+                  embeds: [embed],
+                  files: [transcriptPath],
+                });
+              }
+            }
+          }
+
           const embed = new EmbedBuilder()
             .setTitle('🔒 Ticket Auto-Closed')
-            .setDescription(Lang.t('automation.auto_closed'))
+            .setDescription(
+              `This ticket has been automatically closed due to inactivity.\n\n` +
+              `**Total time inactive:** ${totalMinutes / 60} hours\n\n` +
+              `If you still need help, please open a new ticket.`
+            )
             .setColor('#FF0000')
             .setTimestamp();
 
@@ -94,6 +138,14 @@ export class AutomationManager {
           TicketManager.closeTicket(ticket.ticketId, client.user!.id, client.user!.username);
           
           console.log(chalk.red(`🔒 Auto-closed ticket ${ticket.ticketId} due to inactivity`));
+
+          setTimeout(async () => {
+            try {
+              await channel.delete();
+            } catch (error) {
+              console.error(chalk.red('❌ Error deleting channel:'), error);
+            }
+          }, 10000);
         } catch (error) {
           console.error(chalk.red(`❌ Error auto-closing ${ticket.ticketId}:`), error);
         }
@@ -130,7 +182,6 @@ export class AutomationManager {
             .setColor('#FFA500')
             .setTimestamp();
 
-          // Ping staff roles
           const staffPings = config.staff_roles.map(id => `<@&${id}>`).join(' ');
           await channel.send({ content: staffPings, embeds: [embed] });
           
@@ -142,51 +193,6 @@ export class AutomationManager {
     } catch (error) {
       console.error(chalk.red('❌ Error in staff response check:'), error);
     }
-  }
-
-  static checkWorkingHours(): { isOpen: boolean; message?: string } {
-    const config = ConfigHandler.getConfig();
-    
-    if (!config.working_hours?.enabled) {
-      return { isOpen: true };
-    }
-
-    const now = new Date();
-    const dayName = now.toLocaleDateString('en-US', { weekday: 'long' }).toLowerCase() as keyof typeof config.working_hours.schedule;
-    const daySchedule = config.working_hours.schedule[dayName];
-
-    if (!daySchedule?.enabled) {
-      const hours = this.getWorkingHoursString(config);
-      return {
-        isOpen: false,
-        message: Lang.t('working_hours.outside', { hours }),
-      };
-    }
-
-    const currentTime = now.toLocaleTimeString('en-US', {
-      hour12: false,
-      hour: '2-digit',
-      minute: '2-digit',
-    });
-
-    if (currentTime < daySchedule.start || currentTime > daySchedule.end) {
-      const hours = this.getWorkingHoursString(config);
-      return {
-        isOpen: false,
-        message: Lang.t('working_hours.outside', { hours }),
-      };
-    }
-
-    return { isOpen: true };
-  }
-
-  private static getWorkingHoursString(config: any): string {
-    const schedule = config.working_hours.schedule;
-    const days = Object.entries(schedule)
-      .filter(([_, data]: [string, any]) => data.enabled)
-      .map(([day, data]: [string, any]) => `${day}: ${data.start}-${data.end}`);
-    
-    return days.join(', ');
   }
 
   static checkTicketOverload(): boolean {

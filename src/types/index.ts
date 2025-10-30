@@ -17,6 +17,7 @@ export interface TicketData {
   messages: TicketMessage[];
   lastActivity: number;
   inactivityWarned?: boolean;
+  inactivityWarningTime?: number;
   rating?: number;
   feedbackText?: string;
 }
@@ -84,56 +85,32 @@ export interface Config {
   token: string;
   guild_id: string;
   staff_roles: string[];
-  ticket_category_id: string;
   feedback_channel_id: string;
-  transcript_channel_id: string;
-  log_channel_id?: string;
   
-  // Branding & Appearance
   embed_color: string;
   footer_text: string;
   bot_name: string;
   thumbnail_url?: string;
   banner_url?: string;
   
-  // Language
   language: string;
   
-  // Features
   features: {
     ai_responses: boolean;
     auto_close: boolean;
-    working_hours: boolean;
     ticket_reviews: boolean;
     transcripts: boolean;
     addons: boolean;
   };
   
-  // Automation
   automation: {
-    inactivity_timeout: number; // minutes
-    inactivity_warning: number; // minutes before timeout
-    staff_reminder_timeout: number; // minutes
+    inactivity_timeout: number;
+    inactivity_warning_grace: number;
+    staff_reminder_timeout: number;
     max_tickets_per_user: number;
     ticket_overload_limit: number;
   };
   
-  // Working Hours
-  working_hours: {
-    enabled: boolean;
-    timezone: string;
-    schedule: {
-      monday: { start: string; end: string; enabled: boolean };
-      tuesday: { start: string; end: string; enabled: boolean };
-      wednesday: { start: string; end: string; enabled: boolean };
-      thursday: { start: string; end: string; enabled: boolean };
-      friday: { start: string; end: string; enabled: boolean };
-      saturday: { start: string; end: string; enabled: boolean };
-      sunday: { start: string; end: string; enabled: boolean };
-    };
-  };
-  
-  // Transcripts
   transcripts: {
     format: 'html' | 'txt' | 'both';
     send_to_user: boolean;
@@ -141,7 +118,6 @@ export interface Config {
     include_attachments: boolean;
   };
   
-  // AI Settings
   ai: {
     enabled: boolean;
     provider?: string;
@@ -150,7 +126,6 @@ export interface Config {
     auto_respond_delay?: number;
   };
   
-  // Priority Colors
   priority_colors: {
     low: string;
     medium: string;
@@ -158,10 +133,8 @@ export interface Config {
     urgent: string;
   };
   
-  // Custom Tags
   available_tags: string[];
   
-  // Messages
   blacklist_message?: string;
   close_ticket_message?: string;
   ticket_created_message?: string;
@@ -187,6 +160,33 @@ export interface ModalQuestion {
   max_length?: number;
 }
 
+export interface WorkingHoursSchedule {
+  enabled: boolean;
+  start: string;
+  end: string;
+}
+
+export interface WorkingHoursMessage {
+  title: string;
+  description: string;
+  color: string;
+}
+
+export interface WorkingHours {
+  enabled: boolean;
+  timezone: string;
+  message: WorkingHoursMessage;
+  schedule: {
+    monday: WorkingHoursSchedule;
+    tuesday: WorkingHoursSchedule;
+    wednesday: WorkingHoursSchedule;
+    thursday: WorkingHoursSchedule;
+    friday: WorkingHoursSchedule;
+    saturday: WorkingHoursSchedule;
+    sunday: WorkingHoursSchedule;
+  };
+}
+
 export interface Panel {
   title: string;
   description: string;
@@ -199,6 +199,10 @@ export interface Panel {
     name: string;
     icon_url?: string;
   };
+  ticket_category_id: string;
+  log_channel_id: string;
+  transcript_channel_id: string;
+  working_hours: WorkingHours;
   categories: PanelCategory[];
 }
 

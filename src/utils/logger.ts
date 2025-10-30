@@ -12,7 +12,6 @@ export class Logger {
   private static logs: LogEntry[] = [];
 
   static {
-    // Ensure directories exist
     if (!fs.existsSync(this.logsDir)) {
       fs.mkdirSync(this.logsDir, { recursive: true });
     }
@@ -77,12 +76,13 @@ export class Logger {
     fs.appendFileSync(logFile, logLine);
   }
 
-  public static async sendToLogChannel(client: Client, entry: LogEntry): Promise<void> {
+  public static async sendToLogChannel(client: Client, entry: LogEntry, customChannelId?: string): Promise<void> {
     try {
       const config = ConfigHandler.getConfig();
-      if (!config.log_channel_id) return;
+      const channelId = customChannelId;
+      if (!channelId) return;
 
-      const channel = await client.channels.fetch(config.log_channel_id) as TextChannel;
+      const channel = await client.channels.fetch(channelId) as TextChannel;
       if (!channel) return;
 
       const embed = new EmbedBuilder()
