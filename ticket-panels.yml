@@ -1,7 +1,7 @@
 panels:
   1:
-    title: "🎟️ Support Tickets"
-    description: "Need help? Choose your issue below!"
+    title: "🎟️ Ticket Support"
+    description: "Need help? \n Choose your issue below!"
     color: "#5865F2"
     footer: "Support Center © 2025"
     emoji: "🎫"

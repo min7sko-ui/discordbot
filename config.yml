@@ -3,7 +3,7 @@
 # IMPORTANT: Sensitive values like tokens should be in .env file, not here!
 
 # Discord Bot Settings (Use environment variables for sensitive data)
-token: "MTI0OTI1ODk2NjIzMjQ2OTUwNg.G1WFQR.ygQlQ21BcJgmeCOwDNzDTWyhBXtLWTqVJHN2Qw"  # Leave empty - set DISCORD_TOKEN in .env file
+token: "MTI0OTI1ODk2NjIzMjQ2OTUwNg.GIcNLf.BOEg67zH2TN2whhU6OZe53bJHq_H50eYnb4g8c"  # Leave empty - set DISCORD_TOKEN in .env file
 guild_id: "1170748791616450652"  # Set GUILD_ID in .env file
 
 # Staff & Channel Configuration
