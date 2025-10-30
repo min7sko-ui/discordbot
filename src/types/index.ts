@@ -1,6 +1,8 @@
 export interface TicketData {
   ticketId: string;
   channelId: string;
+  guildId: string;
+  embedMessageId?: string;
   userId: string;
   username: string;
   category: string;
@@ -158,6 +160,12 @@ export interface Config {
   
   // Custom Tags
   available_tags: string[];
+  
+  // Messages
+  blacklist_message?: string;
+  close_ticket_message?: string;
+  ticket_created_message?: string;
+  feedback_prompt_message?: string;
 }
 
 export interface PanelCategory {

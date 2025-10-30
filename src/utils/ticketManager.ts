@@ -128,6 +128,7 @@ export class TicketManager {
       const ticketData: TicketData = {
         ticketId,
         channelId: channel.id,
+        guildId: guild.id,
         userId: user.id,
         username: user.username,
         category,
@@ -160,7 +161,7 @@ export class TicketManager {
             timestamp: `<t:${Math.floor(Date.now() / 1000)}:R>`,
           }) + `\n\n**${category}**\n${answers.map((a, i) => `**Q${i + 1}:** ${a}`).join('\n\n')}`
         )
-        .setColor(config.embed_color)
+        .setColor(config.embed_color as any)
         .setFooter({ text: Lang.t('footer.ticket', { ticketId, status: 'Open' }) })
         .setTimestamp();
 
@@ -191,7 +192,11 @@ export class TicketManager {
           .setStyle(ButtonStyle.Secondary)
       );
 
-      await channel.send({ content: `${user}`, embeds: [embed], components: [buttons] });
+      const embedMessage = await channel.send({ content: `${user}`, embeds: [embed], components: [buttons] });
+
+      // Store the embed message ID for future updates
+      ticketData.embedMessageId = embedMessage.id;
+      this.saveTickets(tickets);
 
       // Log creation
       Logger.log(
