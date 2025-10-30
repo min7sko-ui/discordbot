@@ -64,7 +64,13 @@ export class TicketManager {
     }
 
     const now = new Date();
-    const dayName = now.toLocaleDateString('en-US', { weekday: 'long' }).toLowerCase() as keyof typeof panel.working_hours.schedule;
+    const timezone = panel.working_hours.timezone;
+    
+    const dayName = now.toLocaleDateString('en-US', { 
+      weekday: 'long',
+      timeZone: timezone
+    }).toLowerCase() as keyof typeof panel.working_hours.schedule;
+    
     const daySchedule = panel.working_hours.schedule[dayName];
 
     if (!daySchedule?.enabled) {
@@ -80,6 +86,7 @@ export class TicketManager {
       hour12: false,
       hour: '2-digit',
       minute: '2-digit',
+      timeZone: timezone
     });
 
     if (currentTime < daySchedule.start || currentTime > daySchedule.end) {
