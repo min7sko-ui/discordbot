@@ -4,7 +4,7 @@
 # NOTE: Channel settings (category, logs, transcripts) are now per-panel in ticket-panels.yml
 
 # Discord Bot Settings (Use environment variables for sensitive data)
-token: "MTI0OTI1ODk2NjIzMjQ2OTUwNg.GIcNLf.BOEg67zH2TN2whhU6OZe53bJHq_H50eYnb4g8c"  # Leave empty - set DISCORD_TOKEN in .env file
+token: "MTI0OTI1ODk2NjIzMjQ2OTUwNg.GaPbuz.3ZBpKzk82tvItvIb_IjfzHpGR8IQiGtDwoYUA4"  # Leave empty - set DISCORD_TOKEN in .env file
 guild_id: "1170748791616450652"  # Set GUILD_ID in .env file
 
 # Staff & Channel Configuration
