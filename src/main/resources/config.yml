@@ -1,0 +1,4 @@
+settings:
+  max-orders-per-player: 10
+  order-expiration-days: 30
+  enable-notifications: true
