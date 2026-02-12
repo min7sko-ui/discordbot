@@ -1,0 +1,21 @@
+name: AdvancedOrders
+version: ${version}
+main: com.min7sko.advancedorders.AdvancedOrders
+api-version: '1.21'
+depend: [Vault]
+author: min7sko
+description: Advanced GUI-based order system for Minecraft
+
+commands:
+  orders:
+    description: Open the orders GUI
+    usage: /orders
+    permission: advancedorders.use
+    
+permissions:
+  advancedorders.use:
+    description: Allows using the orders system
+    default: true
+  advancedorders.admin:
+    description: Allows administrative access to orders
+    default: op
